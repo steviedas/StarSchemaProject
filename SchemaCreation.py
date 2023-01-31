@@ -242,36 +242,32 @@ display(bike_df)
 # COMMAND ----------
 
 from pyspark.sql import functions as F
-
-start_date_df = silver_trips_delta_df.select("started_at").withColumnRenamed("started_at","date")
-end_date_df = silver_trips_delta_df.select("ended_at").withColumnRenamed("ended_at","date")
-
-date_df = start_date_df.union(end_date_df).distinct()    
-print(date_df)
-display(date_df)
-
-# COMMAND ----------
-
-from pyspark.sql import functions as F
 from pyspark.sql.functions import col, split
 from pyspark.sql.window import Window
 
+#Create two dataframes, one containing only the start-date and one for the end_date
+start_date_df = silver_trips_delta_df.select("started_at").withColumnRenamed("started_at","date")
+end_date_df = silver_trips_delta_df.select("ended_at").withColumnRenamed("ended_at","date")
+
+#Join the previous two dataframes together within one date column
+date1_df = start_date_df.union(end_date_df).distinct()    
+
 # Cast the date column as string
-date_df = date_df.withColumn("date", col("date").cast("string"))
+date1_df = date1_df.withColumn("date", col("date").cast("string"))
 
-# Create new columns date_ext and time_ext
-date_df1 = date_df.withColumn('date_ext', split(col('date'), ' ')[0].substr(1, 11)).withColumn('time_ext', split(col('date'), ' ')[1].substr(0,5))
+# Create new columns date_ext and time_ext. This table has date(yyyy-mm-dd hh:mm:ss), date_ext and time_ext columns
+date_df1 = date1_df.withColumn('date_ext', split(col('date'), ' ')[0].substr(1, 11)).withColumn('time_ext', split(col('date'), ' ')[1].substr(0,5))
 
+#Create a new dataframe from the payments table that has only one date column
 payment_date_df1 = silver_payments_delta_df.select("date")
 
-trip_df1 = date_df1.select("date_ext").alias("date")
-date_final_df = payment_date_df1.union(trip_df1).distinct()
+date_df2 = date_df1.select("date_ext").alias("date")
+date_final_df = payment_date_df1.union(date_df2).distinct()
 
 w2 = Window.orderBy("date")
-date_final_df = date_final_df.withColumn("date_id", F.row_number().over(w2)).select("date_id","date")
-date_final_df = date_final_df.withColumn("date", col("date").cast("date"))
-display(date_final_df)
-print(date_final_df)
+date_df = date_final_df.withColumn("date_id", F.row_number().over(w2)).select("date_id","date")
+date_df = date_df.withColumn("date", col("date").cast("date"))
+display(date_df)
 
 # COMMAND ----------
 
@@ -307,62 +303,62 @@ display(silver_trips_delta_df)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Calculate the trip duration
+# MAGIC ###Calculate the trip duration
 
 # COMMAND ----------
 
 from pyspark.sql import functions as F
-trips3 = silver_trips_delta_df.withColumn("trip_duration", ((F.unix_timestamp(silver_trips_delta_df["ended_at"]) - F.unix_timestamp(silver_trips_delta_df["started_at"]))/60))
-display(trips3)
+trips1_df = silver_trips_delta_df.withColumn("trip_duration", ((F.unix_timestamp(silver_trips_delta_df["ended_at"]) - F.unix_timestamp(silver_trips_delta_df["started_at"]))/60))
+display(trips1_df)
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Add the bike_id to the Trip Fact table
+# MAGIC ###Add the bike_id to the Trip Fact table
 
 # COMMAND ----------
 
-trips4 = trips3.join(bike_df, on=["rideable_type"], how="left").drop("rideable_type")
-display(trips4)
+trips2_df = trips1_df.join(bike_df, on=["rideable_type"], how="left").drop("rideable_type")
+display(trips2_df)
 
 # COMMAND ----------
 
-trips5 = trips4.withColumn("started_at", col("started_at").cast("string")).withColumn("ended_at", col("ended_at").cast("string"))
-trips6 = trips5.withColumn('started_at_date', split(col('started_at'), ' ')[0].substr(1, 11)) \
+trips3_df = trips2_df.withColumn("started_at", col("started_at").cast("string")).withColumn("ended_at", col("ended_at").cast("string"))
+trips4_df = trips3_df.withColumn('started_at_date', split(col('started_at'), ' ')[0].substr(1, 11)) \
     .withColumn('started_at_time', split(col('started_at'), ' ')[1].substr(0,5)) \
     .withColumn('ended_at_date', split(col('ended_at'), ' ')[0].substr(1, 11)) \
     .withColumn('ended_at_time', split(col('ended_at'), ' ')[1].substr(0,5)) \
     .drop("started_at","ended_at")
-display(trips6)
+display(trips4_df)
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Changing all the startdates and enddates to the eqivalent startdate_id and enddate_id
+# MAGIC ###Changing all the startdates and enddates to the eqivalent startdate_id and enddate_id
 
 # COMMAND ----------
 
-trips7 = trips6 \
-    .join(date_final_df, trips6.started_at_date == date_final_df.date, 'left') \
+trips5_df = trips4_df \
+    .join(date_df, trips4_df.started_at_date == date_df.date, 'left') \
     .withColumnRenamed("date", "date_at_start") \
     .withColumnRenamed("date_id", "started_at_date_id") \
-    .join(date_final_df, trips6.ended_at_date == date_final_df.date, 'left') \
+    .join(date_df, trips4_df.ended_at_date == date_df.date, 'left') \
     .drop("date") \
     .withColumnRenamed("date_id", "ended_at_date_id") \
     .drop("started_at_date", "ended_at_date") \
-    .join(time_df, trips6.started_at_time == time_df.time_ext, 'left') \
+    .join(time_df, trips4_df.started_at_time == time_df.time_ext, 'left') \
     .drop("time_ext") \
     .withColumnRenamed("time_id", "started_at_time_id") \
-    .join(time_df, trips6.ended_at_time == time_df.time_ext, 'left') \
+    .join(time_df, trips4_df.ended_at_time == time_df.time_ext, 'left') \
     .drop("time_ext") \
     .withColumnRenamed("time_id", "ended_at_time_id") \
     .drop("started_at_time", "ended_at_time")
-display(trips7)
+display(trips5_df)
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Create a subset of the rider table
+# MAGIC ###Create a subset of the rider table
 
 # COMMAND ----------
 
@@ -372,13 +368,34 @@ display(subset_riders_df)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Join the birthday to trips facts table
+# MAGIC ###Join the birthday to trips facts table
 
 # COMMAND ----------
 
 from pyspark.sql.functions import datediff
-trips8 = trips7.join(subset_riders_df, on=["rider_id"], how="left")
-trips9 = trips8.withColumn("rider_age", (datediff(col("date_at_start"),col("birthday"))/365).cast("int")) \
+trips6_df = trips5_df.join(subset_riders_df, on=["rider_id"], how="left")
+trips_df = trips6_df.withColumn("rider_age", (datediff(col("date_at_start"),col("birthday"))/365).cast("int")) \
     .drop("date_at_start", "birthday") \
     .select("trip_id", "rider_id", "bike_id", "start_station_id", "end_station_id", "started_at_date_id", "ended_at_date_id", "started_at_time_id", "ended_at_time_id", "rider_age", "trip_duration")
-display(trips9)
+display(trips_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ##Write all the dataframes to Gold
+
+# COMMAND ----------
+
+bike_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_bikes")
+
+date_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_dates")
+
+time_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_times")
+
+payments_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/fact_payments")
+
+trips_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/fact_trips")
+
+silver_stations_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_stations")
+
+silver_riders_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_riders")
