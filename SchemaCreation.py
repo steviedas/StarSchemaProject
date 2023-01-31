@@ -258,6 +258,7 @@ display(date_df)
 
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col, split
+from pyspark.sql.window import Window
 
 # Cast the date column as string
 date_df = date_df.withColumn("date", col("date").cast("string"))
@@ -272,8 +273,9 @@ date_final_df = payment_date_df1.union(trip_df1).distinct()
 
 w2 = Window.orderBy("date")
 date_final_df = date_final_df.withColumn("date_id", F.row_number().over(w2)).select("date_id","date")
-
+date_final_df = date_final_df.withColumn("date", col("date").cast("date"))
 display(date_final_df)
+print(date_final_df)
 
 # COMMAND ----------
 
@@ -284,4 +286,15 @@ display(date_final_df)
 
 w = Window.orderBy('time_ext')
 time_df = date_df1.select('time_ext').distinct().withColumn('time_id', F.row_number().over(w)).select('time_id', 'time_ext')
+#time_df = time_df.withColumnRenamed("time_ext", "time").withColumn("time", col("time").cast("time"))
 display(time_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ##Create the Payments table
+
+# COMMAND ----------
+
+payments_df = silver_payments_delta_df.join(date_final_df, on=["date"], how="left").drop("date").select("payment_id", "rider_id", "date_id", "amount")
+display(payments_df)
