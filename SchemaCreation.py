@@ -81,21 +81,36 @@ payments_bronze_schema = StructType ([
 
 # COMMAND ----------
 
+
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##Write all the CSV's to Bronze as Delta Format
 
 # COMMAND ----------
 
-csv_file_type = "csv"
-table_file_type = "delta"
-
 spark.read.format(csv_file_type).load("/tmp/Steven/landing/trips.csv", schema = trips_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/trips")
 
-spark.read.format(csv_file_type).load("/tmp/Steven/landing/stations.csv", schema = station_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/stations")
+spark.read.format(csv_file_type).load("/tmp/Steven/landing/stations.csv", schema = stations_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/stations")
 
 spark.read.format(csv_file_type).load("/tmp/Steven/landing/riders.csv", schema = riders_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/riders")
 
 spark.read.format(csv_file_type).load("/tmp/Steven/landing/payments.csv", schema = payments_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/payments")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ##Delete all the files in 'tmp/Steven/Bronze'
+
+# COMMAND ----------
+
+dbutils.fs.rm("/tmp/Steven/landing/Bronze/", True)
+
+# COMMAND ----------
+
+# MAGIC %sh
+# MAGIC rm -rf /dbfs/tmp/Steven/Bronze/*
 
 # COMMAND ----------
 
@@ -108,10 +123,10 @@ from pyspark.sql.types import *
 trips_silver_schema = StructType ([
     StructField("trip_id", StringType(), True),
     StructField("rideable_type", StringType(), True),
-    StructField("started_at", DateType(), True),
-    StructField("ended_at", DateType(), True),
-    StructField("start_station_id", IntegerType(), True),
-    StructField("end_station_id", IntegerType(), True),
+    StructField("started_at", TimestampType(), True),
+    StructField("ended_at", TimestampType(), True),
+    StructField("start_station_id", StringType(), True),
+    StructField("end_station_id", StringType(), True),
     StructField("rider_id", IntegerType(), True),
 ])
 
@@ -147,28 +162,45 @@ payments_silver_schema = StructType ([
 
 # COMMAND ----------
 
-df = spark.read.format("delta").load("/tmp/Steven/Bronze/trips/")
-display(df)
+from pyspark.sql.types import StructType, StructField, StringType, TimestampType
+from pyspark.sql.functions import unix_timestamp, col
+
+# Trips
+bronze_trips_df = spark.read.format("delta").load("/tmp/Steven/Bronze/trips/")
+bronze_trips_df_1 = bronze_trips_df.withColumn("started_at", unix_timestamp(col("started_at"), 'dd/MM/yyyy HH:mm').cast("timestamp")).withColumn("ended_at", unix_timestamp(col("ended_at"), 'dd/MM/yyyy HH:mm').cast("timestamp"))
+
+# Stations
+bronze_stations_df = spark.read.format("delta").load("/tmp/Steven/Bronze/stations/")
+
+# Riders
+bronze_riders_df = spark.read.format("delta").load("/tmp/Steven/Bronze/riders/")
+
+# Payments
+bronze_payments_df = spark.read.format("delta").load("/tmp/Steven/Bronze/payments/")
+
+
+# Iterating over all columns to change data type accroding to silver schema
+silver_trips_df = bronze_trips_df_1.select(*(bronze_trips_df_1[c].cast(trips_silver_schema[i].dataType) for i, c in enumerate(bronze_trips_df_1.columns)))
+silver_stations_df = bronze_stations_df.select(*(bronze_stations_df[c].cast(stations_silver_schema[i].dataType) for i, c in enumerate(bronze_stations_df.columns)))
+silver_riders_df = bronze_riders_df.select(*(bronze_riders_df[c].cast(riders_silver_schema[i].dataType) for i, c in enumerate(bronze_riders_df.columns)))
+silver_payments_df = bronze_payments_df.select(*(bronze_payments_df[c].cast(payments_silver_schema[i].dataType) for i, c in enumerate(bronze_payments_df.columns)))
 
 # COMMAND ----------
 
-print(df)
+display(silver_trips_df)
+print(bronze_trips_df_1)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import date_format
-
-#df_1 = df.select("trip_id", date_format(df["started_at"], "dd/MM/yyyy HH:mm")).show()
-#df_1 = df.withColumn("started_at", df["started_at"].cast("date"))
-#df_1 = df.select(from_unixtime(unix_timestamp(df.started_at, 'dd/MM/yyyy HH:mm')).alias('start'))
-df_1 = df \
-.withColumn("started_at",from_unixtime(unix_timestamp(col("started_at"), 'dd/MM/yyyy HH:mm'))) \
-.withColumn("started_at", date_format(col("started_at"), "dd/MM/yyyy HH:mm"))
+# MAGIC %md
+# MAGIC ##Write all the Bronze dataframes to Silver in Delta format
 
 # COMMAND ----------
 
-print(df_1)
+silver_trips_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Silver/trips")
 
-# COMMAND ----------
+silver_stations_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Silver/stations")
 
-display(df_1)
+silver_riders_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Silver/riders")
+
+silver_payments_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Silver/payments")
