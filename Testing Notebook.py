@@ -80,7 +80,7 @@ rider_silver_schema = StructType ([
 payment_silver_schema = StructType ([
     StructField("payment_id", IntegerType(), True),
     StructField("date", DateType(), True),
-    StructField("amount", DecimalType(), True),
+    StructField("amount", FloatType(), True),
     StructField("rider_id", IntegerType(), True),
 ])
 
