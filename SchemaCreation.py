@@ -250,11 +250,7 @@ from pyspark.sql import functions as F
 start_date_df = silver_trips_delta_df.select("started_at").withColumnRenamed("started_at","date")
 end_date_df = silver_trips_delta_df.select("ended_at").withColumnRenamed("ended_at","date")
 
-# Define the window specification
-w2 = Window.orderBy("date")
-
-# Merging two columns "col1" and "col2" into a new column "merged_col"
-date_df = start_date_df.union(end_date_df).distinct()    #.withColumn("date_id", F.row_number().over(w2)).select("date_id","date")
+date_df = start_date_df.union(end_date_df).distinct()    
 print(date_df)
 display(date_df)
 
@@ -263,13 +259,29 @@ display(date_df)
 from pyspark.sql import functions as F
 from pyspark.sql.functions import col, split
 
-# Split the "merged_col" column by the delimiter "T "
+# Cast the date column as string
 date_df = date_df.withColumn("date", col("date").cast("string"))
-date_df1 = date_df.withColumn('date_ext', split(col('date'), ' ')[0].substr(1, 11))
-date_df1 = date_df1.withColumn('time_ext', split(col('date'), ' ')[1].substr(0,5))
 
-display(date_df1)
+# Create new columns date_ext and time_ext
+date_df1 = date_df.withColumn('date_ext', split(col('date'), ' ')[0].substr(1, 11)).withColumn('time_ext', split(col('date'), ' ')[1].substr(0,5))
 
-# from pyspark.sql.functions import split, col 
-# merged_dates1 = merged_dates.withColumn('date', split(col('started_at'), ' ')[0])
-# merged_dates1 = merged_dates1.withColumn('time', split(col('started_at'), ' ')[1].substr(0,5))
+payment_date_df1 = silver_payments_delta_df.select("date")
+
+trip_df1 = date_df1.select("date_ext").alias("date")
+date_final_df = payment_date_df1.union(trip_df1).distinct()
+
+w2 = Window.orderBy("date")
+date_final_df = date_final_df.withColumn("date_id", F.row_number().over(w2)).select("date_id","date")
+
+display(date_final_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ##Create the Time Table
+
+# COMMAND ----------
+
+w = Window.orderBy('time_ext')
+time_df = date_df1.select('time_ext').distinct().withColumn('time_id', F.row_number().over(w)).select('time_id', 'time_ext')
+display(time_df)
