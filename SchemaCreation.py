@@ -8,15 +8,34 @@
 
 # COMMAND ----------
 
+dbutils.fs.rm("/tmp/Steven/Github/", True)
+
+# COMMAND ----------
+
+!wget "https://github.com/steviedas/steven-repo/blob/main/payments.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/blob/main/riders.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/blob/main/stations.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/blob/main/trips.zip" -P "/dbfs/tmp/Steven/Github/"
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##Unzip files to Steven/landing
+
+# COMMAND ----------
+
+dbutils.fs.rm("/tmp/Steven/landing/", True)
+
+# COMMAND ----------
+
+dbutils.fs.mkdirs("/tmp/Steven/landing")
 
 # COMMAND ----------
 
 import subprocess
 import glob
 
-zip_files = glob.glob("/dbfs/tmp/landing/*.zip")
+zip_files = glob.glob("/dbfs/tmp/Steven/Github/*.zip")
 
 for zip_file in zip_files:
     extract_to_dir = "/dbfs/tmp/Steven/landing"
