@@ -278,7 +278,7 @@ display(date_df)
 
 w = Window.orderBy('time_ext')
 time_df = date_df1.select('time_ext').distinct().withColumn('time_id', F.row_number().over(w)).select('time_id', 'time_ext')
-#time_df = time_df.withColumnRenamed("time_ext", "time").withColumn("time", col("time").cast("time"))
+time_df = time_df.withColumnRenamed("time_ext", "time").withColumn("time", col("time"))
 display(time_df)
 
 # COMMAND ----------
@@ -288,7 +288,7 @@ display(time_df)
 
 # COMMAND ----------
 
-payments_df = silver_payments_delta_df.join(date_final_df, on=["date"], how="left").drop("date").select("payment_id", "rider_id", "date_id", "amount")
+payments_df = silver_payments_delta_df.join(date_df, on=["date"], how="left").drop("date").select("payment_id", "rider_id", "date_id", "amount")
 display(payments_df)
 
 # COMMAND ----------
@@ -323,6 +323,11 @@ display(trips2_df)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ###Changing all the startdates and enddates to the eqivalent startdate_id and enddate_id
+
+# COMMAND ----------
+
 trips3_df = trips2_df.withColumn("started_at", col("started_at").cast("string")).withColumn("ended_at", col("ended_at").cast("string"))
 trips4_df = trips3_df.withColumn('started_at_date', split(col('started_at'), ' ')[0].substr(1, 11)) \
     .withColumn('started_at_time', split(col('started_at'), ' ')[1].substr(0,5)) \
@@ -330,11 +335,6 @@ trips4_df = trips3_df.withColumn('started_at_date', split(col('started_at'), ' '
     .withColumn('ended_at_time', split(col('ended_at'), ' ')[1].substr(0,5)) \
     .drop("started_at","ended_at")
 display(trips4_df)
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ###Changing all the startdates and enddates to the eqivalent startdate_id and enddate_id
 
 # COMMAND ----------
 
@@ -346,11 +346,11 @@ trips5_df = trips4_df \
     .drop("date") \
     .withColumnRenamed("date_id", "ended_at_date_id") \
     .drop("started_at_date", "ended_at_date") \
-    .join(time_df, trips4_df.started_at_time == time_df.time_ext, 'left') \
-    .drop("time_ext") \
+    .join(time_df, trips4_df.started_at_time == time_df.time, 'left') \
+    .drop("time") \
     .withColumnRenamed("time_id", "started_at_time_id") \
-    .join(time_df, trips4_df.ended_at_time == time_df.time_ext, 'left') \
-    .drop("time_ext") \
+    .join(time_df, trips4_df.ended_at_time == time_df.time, 'left') \
+    .drop("time") \
     .withColumnRenamed("time_id", "ended_at_time_id") \
     .drop("started_at_time", "ended_at_time")
 display(trips5_df)
@@ -383,6 +383,10 @@ display(trips_df)
 
 # MAGIC %md
 # MAGIC ##Write all the dataframes to Gold
+
+# COMMAND ----------
+
+dbutils.fs.rm("/tmp/Steven/Gold/", True)
 
 # COMMAND ----------
 
