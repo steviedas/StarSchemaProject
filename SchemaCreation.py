@@ -1,10 +1,16 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC ##List all the files in the /tmp/ directory
+
+# COMMAND ----------
+
 # MAGIC %fs
 # MAGIC ls /tmp/
 
 # COMMAND ----------
 
-!pip install unzip
+# MAGIC %md
+# MAGIC ##Remove the files from /tmp/Steven/Github/
 
 # COMMAND ----------
 
@@ -12,39 +18,24 @@ dbutils.fs.rm("/tmp/Steven/Github/", True)
 
 # COMMAND ----------
 
-!wget "https://github.com/steviedas/steven-repo/blob/main/payments.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/blob/main/riders.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/blob/main/stations.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/blob/main/trips.zip" -P "/dbfs/tmp/Steven/Github/"
+# MAGIC %md
+# MAGIC ##Get the files from Github repository
+
+# COMMAND ----------
+
+!wget "https://github.com/steviedas/steven-repo/raw/main/payments.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/raw/main/riders.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/raw/main/stations.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/raw/main/trips.zip" -P "/dbfs/tmp/Steven/Github/"
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Unzip files to Steven/landing
+# MAGIC ##Delete all the files in Steven/Landing
 
 # COMMAND ----------
 
-dbutils.fs.rm("/tmp/Steven/landing/", True)
-
-# COMMAND ----------
-
-dbutils.fs.mkdirs("/tmp/Steven/landing")
-
-# COMMAND ----------
-
-import subprocess
-import glob
-
-zip_files = glob.glob("/dbfs/tmp/Steven/Github/*.zip")
-
-for zip_file in zip_files:
-    extract_to_dir = "/dbfs/tmp/Steven/landing"
-    subprocess.call(["unzip", "-d", extract_to_dir, zip_file])
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ##Delete all the files in Steven/landing
+dbutils.fs.rm("/tmp/Steven/Landing/", True)
 
 # COMMAND ----------
 
@@ -53,7 +44,26 @@ for zip_file in zip_files:
 
 # COMMAND ----------
 
-dbutils.fs.rm("/tmp/Steven/landing/", True)
+# MAGIC %md
+# MAGIC ##Unzip files to Steven/landing
+
+# COMMAND ----------
+
+# Make the landing directory
+dbutils.fs.mkdirs("/tmp/Steven/Landing")
+
+# COMMAND ----------
+
+!pip install unzip
+
+# COMMAND ----------
+
+import subprocess
+import glob
+zip_files = glob.glob("/dbfs/tmp/Steven/Github/*.zip")
+for zip_file in zip_files:
+    extract_to_dir = "/dbfs/tmp/Steven/Landing"
+    subprocess.call(["unzip", "-d", extract_to_dir, zip_file])
 
 # COMMAND ----------
 
@@ -100,7 +110,17 @@ payments_bronze_schema = StructType ([
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ##Delete all the files in 'tmp/Steven/Bronze'
 
+# COMMAND ----------
+
+dbutils.fs.rm("/tmp/Steven/Bronze", True)
+
+# COMMAND ----------
+
+# MAGIC %sh
+# MAGIC rm -rf /dbfs/tmp/Steven/Bronze/*
 
 # COMMAND ----------
 
@@ -109,27 +129,13 @@ payments_bronze_schema = StructType ([
 
 # COMMAND ----------
 
-spark.read.format(csv_file_type).load("/tmp/Steven/landing/trips.csv", schema = trips_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/trips")
+spark.read.format('csv').load("/tmp/Steven/Landing/trips.csv", schema = trips_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/trips")
 
-spark.read.format(csv_file_type).load("/tmp/Steven/landing/stations.csv", schema = stations_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/stations")
+spark.read.format('csv').load("/tmp/Steven/Landing/stations.csv", schema = stations_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/stations")
 
-spark.read.format(csv_file_type).load("/tmp/Steven/landing/riders.csv", schema = riders_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/riders")
+spark.read.format('csv').load("/tmp/Steven/Landing/riders.csv", schema = riders_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/riders")
 
-spark.read.format(csv_file_type).load("/tmp/Steven/landing/payments.csv", schema = payments_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/payments")
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ##Delete all the files in 'tmp/Steven/Bronze'
-
-# COMMAND ----------
-
-dbutils.fs.rm("/tmp/Steven/landing/Bronze/", True)
-
-# COMMAND ----------
-
-# MAGIC %sh
-# MAGIC rm -rf /dbfs/tmp/Steven/Bronze/*
+spark.read.format('csv').load("/tmp/Steven/Landing/payments.csv", schema = payments_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/payments")
 
 # COMMAND ----------
 
@@ -206,13 +212,12 @@ silver_payments_df = bronze_payments_df.select(*(bronze_payments_df[c].cast(paym
 
 # COMMAND ----------
 
-display(silver_trips_df)
-print(bronze_trips_df_1)
+# MAGIC %md
+# MAGIC ##Write all the Bronze dataframes to Silver in Delta format
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ##Write all the Bronze dataframes to Silver in Delta format
+dbutils.fs.rm("/tmp/Steven/Silver", True)
 
 # COMMAND ----------
 
@@ -426,7 +431,3 @@ trips_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/fact_tri
 silver_stations_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_stations")
 
 silver_riders_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_riders")
-
-# COMMAND ----------
-
-print(trips_df)
