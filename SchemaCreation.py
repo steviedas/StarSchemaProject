@@ -309,6 +309,7 @@ display(silver_trips_delta_df)
 
 from pyspark.sql import functions as F
 trips1_df = silver_trips_delta_df.withColumn("trip_duration", ((F.unix_timestamp(silver_trips_delta_df["ended_at"]) - F.unix_timestamp(silver_trips_delta_df["started_at"]))/60))
+
 display(trips1_df)
 
 # COMMAND ----------
@@ -377,6 +378,9 @@ trips6_df = trips5_df.join(subset_riders_df, on=["rider_id"], how="left")
 trips_df = trips6_df.withColumn("rider_age", (datediff(col("date_at_start"),col("birthday"))/365).cast("int")) \
     .drop("date_at_start", "birthday") \
     .select("trip_id", "rider_id", "bike_id", "start_station_id", "end_station_id", "started_at_date_id", "ended_at_date_id", "started_at_time_id", "ended_at_time_id", "rider_age", "trip_duration")
+
+trips_df = trips_df.withColumn('trip_duration', col('trip_duration').cast('int'))
+
 display(trips_df)
 
 # COMMAND ----------
@@ -403,3 +407,7 @@ trips_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/fact_tri
 silver_stations_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_stations")
 
 silver_riders_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_riders")
+
+# COMMAND ----------
+
+print(trips_df)
