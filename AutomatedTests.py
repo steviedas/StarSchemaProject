@@ -219,7 +219,7 @@ display(two_b_grouped_df)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import date_format, sum
+from pyspark.sql.functions import date_format, sum, col
 
 # Join the fact_trips_df to fact_payments_df on rider_id
 extra_a_df = fact_trips_df.join(fact_payments_df, fact_trips_df.rider_id == fact_payments_df.rider_id, 'left').select("trip_id", fact_trips_df.rider_id, "amount", "started_at_date_id")
