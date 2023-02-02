@@ -274,3 +274,7 @@ result = (
 # )
 
 display(result)
+
+# COMMAND ----------
+
+# MAGIC %run /Repos/steven.das@qualyfi.co.uk/steven-repo/AutomatedTests

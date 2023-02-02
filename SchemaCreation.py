@@ -1,15 +1,5 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ##List all the files in the /tmp/ directory
-
-# COMMAND ----------
-
-# MAGIC %fs
-# MAGIC ls /tmp/
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ##Remove the files from /tmp/Steven/Github/
 
 # COMMAND ----------
@@ -23,10 +13,10 @@ dbutils.fs.rm("/tmp/Steven/Github/", True)
 
 # COMMAND ----------
 
-!wget "https://github.com/steviedas/steven-repo/raw/main/payments.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/raw/main/riders.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/raw/main/stations.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/raw/main/trips.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/raw/main/zips/payments.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/raw/main/zips/riders.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/raw/main/zips/stations.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/steven-repo/raw/main/zips/trips.zip" -P "/dbfs/tmp/Steven/Github/"
 
 # COMMAND ----------
 
