@@ -178,6 +178,16 @@ display(trips_df)
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ## Create the riders table
+
+# COMMAND ----------
+
+riders_df = silver_riders_delta_df.withColumnRenamed("account_start", "account_start_date").withColumnRenamed("account_end", "account_end_date")
+display(riders_df)
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ##Write all the dataframes to Gold
 
 # COMMAND ----------
@@ -194,4 +204,4 @@ trips_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/fact_tri
 
 silver_stations_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_stations")
 
-silver_riders_delta_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_riders")
+riders_df.write.format("delta").mode("overwrite").save("/tmp/Steven/Gold/dim_riders")
