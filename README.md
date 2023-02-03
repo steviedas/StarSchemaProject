@@ -9,11 +9,7 @@ We created a star schema that ingests data into a Bronze layer. The incoming dat
 Star schema project files are located within this repository.
 
 ## Star schema design
-
-1. **Install binary**
-
-   zoxide runs on most major platforms. If your platform isn't listed below,
-   please [open an issue][issues].
+The various stages of the design of the star schema is shown in the various stages below.
 
    <details>
    <summary>Linux</summary>
@@ -50,71 +46,6 @@ Star schema project files are located within this repository.
 
    </details>
 
-   <details>
-   <summary>macOS</summary>
-
-   > To install zoxide, use a package manager:
-   >
-   > | Repository      | Instructions                                                                                          |
-   > | --------------- | ----------------------------------------------------------------------------------------------------- |
-   > | **[crates.io]** | `cargo install zoxide --locked`                                                                       |
-   > | **[Homebrew]**  | `brew install zoxide`                                                                                 |
-   > | [asdf]          | `asdf plugin add zoxide https://github.com/nyrst/asdf-zoxide.git` <br /> `asdf install zoxide latest` |
-   > | [conda-forge]   | `conda install -c conda-forge zoxide`                                                                 |
-   > | [MacPorts]      | `port install zoxide`                                                                                 |
-   >
-   > Or, run this command in your terminal:
-   >
-   > ```sh
-   > curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-   > ```
-
-   </details>
-
-   <details>
-   <summary>Windows</summary>
-
-   > The recommended way to install zoxide is via `winget`:
-   >
-   > ```sh
-   > winget install zoxide
-   > ```
-   >
-   > Or, you can use an alternative package manager:
-   >
-   > | Repository      | Instructions                          |
-   > | --------------- | ------------------------------------- |
-   > | **[crates.io]** | `cargo install zoxide --locked`       |
-   > | [Chocolatey]    | `choco install zoxide`                |
-   > | [conda-forge]   | `conda install -c conda-forge zoxide` |
-   > | [Scoop]         | `scoop install zoxide`                |
-
-   </details>
-
-   <details>
-   <summary>BSD</summary>
-
-   > To install zoxide, use a package manager:
-   >
-   > | Distribution  | Repository      | Instructions                    |
-   > | ------------- | --------------- | ------------------------------- |
-   > | ***Any***     | **[crates.io]** | `cargo install zoxide --locked` |
-   > | DragonFly BSD | [DPorts]        | `pkg install zoxide`            |
-   > | FreeBSD       | [FreshPorts]    | `pkg install zoxide`            |
-   > | NetBSD        | [pkgsrc]        | `pkgin install zoxide`          |
-
-   </details>
-
-   <details>
-   <summary>Android</summary>
-
-   > To install zoxide, use a package manager:
-   >
-   > | Repository | Instructions         |
-   > | ---------- | -------------------- |
-   > | [Termux]   | `pkg install zoxide` |
-
-   </details>
   
 1. **Conceptual database design**
 2. **Logical database design**
