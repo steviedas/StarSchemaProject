@@ -12,9 +12,15 @@ Star schema project files are located within this repository.
 The various stages of the design of the star schema is shown in the various stages below.
 
    <details>
-   <summary>Linux</summary>
+   <summary>Conceptual database design</summary>
 
    > The recommended way to install zoxide is via the install script:
+   >
+   ><p align="center">
+   ><img src="https://raw.githubusercontent.com/andresz1/size-limit-action/master/assets/pr.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   >  width="686" height="289">
+   ></p>
    >
    > ```sh
    > curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
