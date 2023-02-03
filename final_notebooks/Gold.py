@@ -178,15 +178,6 @@ display(trips_df)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Delete the Gold folder if exists
-
-# COMMAND ----------
-
-dbutils.fs.rm("/tmp/Steven/Gold/", True)
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ##Write all the dataframes to Gold
 
 # COMMAND ----------

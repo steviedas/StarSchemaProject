@@ -39,15 +39,6 @@ silver_payments_df = bronze_payments_df.select(*(bronze_payments_df[c].cast(paym
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Delete the Silver Folder
-
-# COMMAND ----------
-
-dbutils.fs.rm("/tmp/Steven/Silver", True)
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ##Write all the Bronze dataframes to Silver in Delta format
 
 # COMMAND ----------

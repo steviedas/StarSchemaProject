@@ -67,20 +67,6 @@ for zip_file in zip_files:
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##Delete all the files in 'tmp/Steven/Bronze'
-
-# COMMAND ----------
-
-dbutils.fs.rm("/tmp/Steven/Bronze", True)
-
-# COMMAND ----------
-
-# MAGIC %sh
-# MAGIC rm -rf /dbfs/tmp/Steven/Bronze/*
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ##Write all the CSV's to Bronze as Delta Format
 
 # COMMAND ----------
