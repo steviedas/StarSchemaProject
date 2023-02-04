@@ -24,9 +24,9 @@ The various stages of the design of the star schema is shown in the various stag
    <summary>Conceptual Database Design</summary>
 
    ><p align="center">
-   ><img src="https://raw.githubusercontent.com/andresz1/size-limit-action/master/assets/pr.png"
+   ><img src="https://raw.githubusercontent.com/steviedas/steven-repo/main/pictures/ConceptualDatabaseDesign.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
-   >  width="686" height="289">
+   >  width="960" height="540">
    ></p>
    >
    
@@ -36,9 +36,9 @@ The various stages of the design of the star schema is shown in the various stag
    <summary>Logical Database Design</summary>
 
    ><p align="center">
-   ><img src="https://raw.githubusercontent.com/andresz1/size-limit-action/master/assets/pr.png"
+   ><img src="https://raw.githubusercontent.com/steviedas/steven-repo/main/pictures/LogicalDatabaseDesign.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
-   >  width="686" height="289">
+   >  width="960" height="540"
    ></p>
    >
    
@@ -48,9 +48,9 @@ The various stages of the design of the star schema is shown in the various stag
    <summary>Physical Database Design</summary>
 
    ><p align="center">
-   ><img src="https://raw.githubusercontent.com/andresz1/size-limit-action/master/assets/pr.png"
+   ><img src="https://raw.githubusercontent.com/steviedas/steven-repo/main/pictures/PhysicalDatabaseDesign.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
-   >  width="686" height="289">
+   >  width="960" height="540"
    ></p>
    >
    
