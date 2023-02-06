@@ -10,7 +10,10 @@
 [Load Data in Bronze](#load-data-in-bronze) •
 [Transform and Load Data in Gold](#transform-and-load-data-in-gold) •
 [Business Outcomes](#business-outcomes) •
+[Automated Tests](#automated-tests) •
+[Setting up the Workflow](#setting-up-the-workflow) •
 [Pictures](#pictures)
+
 
 This project is based around a bike sharing program, that allows riders to purchase a pass at a kiosk or use a mobile application to unlock a bike at stations around the city and use the bike for a specified amount of time. The bikes can be returned to the same station or another station.
 
