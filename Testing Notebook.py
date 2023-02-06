@@ -1,4 +1,9 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC ##Example code
+
+# COMMAND ----------
+
 import dlt
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
@@ -39,32 +44,12 @@ def top_spark_referrers():
 
 # COMMAND ----------
 
-import dlt
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
+# MAGIC %md
+# MAGIC ##Write the bronze tables to DeltaLiveTables
 
-payments_csv_path = "/tmp/Steven/Landing/payments.csv"
-riders_csv_path = "/tmp/Steven/Landing/riders.csv"
-stations_csv_path = "/tmp/Steven/Landing/stations.csv"
-trips_csv_path = "/tmp/Steven/Landing/trips.csv"
+# COMMAND ----------
 
-#Write to Bronze
-@dlt.table(comment="The raw payments dataset, ingested from the extracted zip file from the Github repository.")
-def bronze_payments():
-  return (spark.read.format('csv').load("/tmp/Steven/Landing/payments.csv", schema = payments_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/payments"))
-
-@dlt.table(comment="The raw riders dataset, ingested from the extracted zip file from the Github repository.")
-def bronze_riders():
-  return (spark.read.format('csv').load("/tmp/Steven/Landing/riders.csv", schema = riders_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/riders"))
-
-@dlt.table(comment="The raw stations dataset, ingested from the extracted zip file from the Github repository.")
-def bronze_stations():
-  return (spark.read.format('csv').load("/tmp/Steven/Landing/stations.csv", schema = stations_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/stations"))
-
-@dlt.table(comment="The raw trips dataset, ingested from the extracted zip file from the Github repository.")
-def bronze_trips():
-  return (spark.read.format('csv').load("/tmp/Steven/Landing/trips.csv", schema = trips_bronze_schema).write.format("delta").mode("overwrite").save("/tmp/Steven/Bronze/trips"))
-
+# MAGIC %run /Repos/steven.das@qualyfi.co.uk/steven-repo/final_notebooks/Bronze
 
 # COMMAND ----------
 
@@ -72,14 +57,27 @@ import dlt
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 
-json_path = "/tmp/Steven/Github"
+@dlt.table(comment="The raw payments dataset, ingested from the extracted zip file from the Github repository.")
+def bronze_payments():
+    return (bronze_payments_df)
 
-@dlt.table(
-  comment="The raw data from the Github repository."
-)
-def <table_name>():
-    df = spark.read.csv()
-    
-    final_df = df.......
-    assert final_df 
-    return (final_df)
+@dlt.table(comment="The raw riders dataset, ingested from the extracted zip file from the Github repository.")
+def bronze_riders():
+    return (bronze_riders_df)
+
+@dlt.table(comment="The raw stations dataset, ingested from the extracted zip file from the Github repository.")
+def bronze_stations():
+    return (bronze_stations_df)
+
+@dlt.table(comment="The raw trips dataset, ingested from the extracted zip file from the Github repository.")
+def bronze_trips():
+    return (bronze_trips_df)
+
+# COMMAND ----------
+
+name = "Steven"
+path = "/tmp/" + name + "/Silver/trips/"
+
+# COMMAND ----------
+
+print(path)

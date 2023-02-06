@@ -283,7 +283,8 @@ extra_two_a_df1 = extra_two_a_df.join(dim_riders_df, extra_two_a_df.rider_id == 
 extra_two_a_df2 = extra_two_a_df1.join(dim_dates_df, extra_two_a_df1.started_at_date_id == dim_dates_df.date_id, 'left').drop("is_member", "date_id", "started_at_date_id")
 
 # Group the data by year and month and make the amount_spent and total_trip_duration columns
-extra_two_a_grouped_df = extra_two_a_df2.groupBy(col("rider_id"), year("date").alias("year"), month("date").alias("month")).agg(sum("amount").alias("amount_spent"), sum("trip_duration").alias("total_trip_duration")).orderBy("rider_id")
+extra_two_a_grouped_df = extra_two_a_df2.groupBy(col("rider_id"), year("date").alias("year"), month("date").alias("month"), col("trip_duration")).agg(sum("amount").alias("amount_spent")).orderBy("rider_id")
+extra_two_a_grouped_df = extra_two_a_grouped_df.groupBy(col("rider_id"), "year", "month", col("amount_spent")).agg(sum("trip_duration").alias("total_trip_duration")).orderBy("rider_id")
 
 display(extra_two_a_grouped_df)
 
@@ -306,6 +307,7 @@ extra_two_b_df1 = extra_two_b_df.join(dim_riders_df, extra_two_b_df.rider_id == 
 extra_two_b_df2 = extra_two_b_df1.join(dim_dates_df, extra_two_b_df1.started_at_date_id == dim_dates_df.date_id, 'left').drop("is_member", "date_id", "started_at_date_id")
 
 # Group the data by year and month and make the amount_spent and total_trip_duration columns
-extra_two_b_grouped_df = extra_two_b_df2.groupBy(col("rider_id"), month("date").alias("month")).agg(sum("amount").alias("amount_spent"), sum("trip_duration").alias("total_trip_duration")).orderBy("rider_id")
+extra_two_b_grouped_df = extra_two_b_df2.groupBy(col("rider_id"), month("date").alias("month"), col("trip_duration")).agg(sum("amount").alias("amount_spent")).orderBy("rider_id")
+extra_two_b_grouped_df = extra_two_b_grouped_df.groupBy(col("rider_id"), "month", col("amount_spent")).agg(sum("trip_duration")).orderBy("rider_id")
 
 display(extra_two_b_grouped_df)
