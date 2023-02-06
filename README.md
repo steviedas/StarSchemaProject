@@ -140,7 +140,7 @@ The notebook called `Bronze` does a few tasks. Below is a summary:
    </details>
 
 ## Load Data in Silver
-The `Silver` notebook loads the created delta files from `tmp/Steven/Bronze` and writes to the empty delta files located in `tmp/Steven/Silver`
+The `Silver` notebook loads the created delta files from `tmp/Steven/Bronze` and writes them to the empty delta files located in `tmp/Steven/Silver`
 
 ## Transform and load data in Gold
 The `Gold` notebook creates all the facts and dimensions tables as shown in [Star Schema design](#star-schema-design). A list of the tables it creates is shown below:
@@ -169,6 +169,27 @@ Analyse how much money is spent
 EXTRA - Analyse how much money is spent per member
 * Based on how many rides the rider averages per month
 * Based on how many minutes the rider spends on a bike per month 
+
+## Automated Tests
+The `AutomatedTests` notebook loads the `BusinessOutcomes` notebook and queries the resultant dataframes. There are several `assert` statements to check that the business outcomes can be answered using these queries. An example `assert` is shown below:
+
+```python
+# ASSERT 1
+assert one_a_week_grouped_df.count() == 7, "This dataframe has an incorrect number of rows"
+```
+
+## Setting up the Workflow
+Within Databricks, to get this project to create the whole dataset automatically, follow the steps listed below:
+1. Clone the repository to your own github account (or ask to be added as a contributor).
+2. Add the repository to Databricks account (on Databricks Repos > Add Repo)
+3. Create a Workflow in Databricks (click on Workflows in the left menu bar and click create job)
+4. Add the notebooks located within the repository in this order: 
+   *DestroySchemasDatabases.py
+   *RebuildSchemasDatabases.py
+   *Bronze.py
+   *Silver.py
+   *Gold.py
+5. Create/Start/Attach a cluster and run the workflow. After this is done running, you should see within DBFS a file directory as shown in the [DBFS File Structure](#pictures) picture.
 
 ## Pictures
 Pictures of the various file structures created and displays of the several dimension and fact tables, are shown below:
@@ -264,4 +285,20 @@ Pictures of the various file structures created and displays of the several dime
    ></p>
    >
    
+   </details>
+   
+   <details>
+      
+   <summary>Successfully Running Workflow</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/StevenWorkFlowFinal1.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/StevenWorkFlowFinal2.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+      
    </details>
