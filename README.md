@@ -9,7 +9,8 @@
 [Rebuilding Schemas](#rebuild-the-schemas-and-databases) •
 [Load Data in Bronze](#load-data-in-bronze) •
 [Transform and Load Data in Gold](#transform-and-load-data-in-gold) •
-[Business Outcomes](#business-outcomes)
+[Business Outcomes](#business-outcomes) •
+[Pictures](#pictures)
 
 This project is based around a bike sharing program, that allows riders to purchase a pass at a kiosk or use a mobile application to unlock a bike at stations around the city and use the bike for a specified amount of time. The bikes can be returned to the same station or another station.
 
@@ -55,7 +56,6 @@ The various stages of the design of the star schema is shown in the various stag
    >
    
    </details>
-
 
 ## Raw Data
 Within the repository, there is a folder called `zips`, contianing the relevant .zip files within. These zips contain the raw data in csv files.
@@ -170,4 +170,98 @@ EXTRA - Analyse how much money is spent per member
 * Based on how many rides the rider averages per month
 * Based on how many minutes the rider spends on a bike per month 
 
+## Pictures
+Pictures of the various file structures created and displays of the several dimension and fact tables, are shown below:
 
+   <details>
+   <summary>DBFS File Structure</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/DeltaTables.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
+
+   <details>
+   <summary>Bikes Dimension Table</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_bikes.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
+  
+   <details>
+   <summary>Dates Dimension Table</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_dates.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
+   
+   <details>
+      
+   <summary>Riders Dimension Table</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_riders.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
+   
+   <details>
+      
+   <summary>Stations Dimension Table</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_stations.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
+   
+   <details>
+      
+   <summary>Times Dimension Table</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_times.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
+   
+   <details>
+      
+   <summary>Fact Payments Table</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/fact_payments.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
+   
+   <details>
+      
+   <summary>Fact Trips Table</summary>
+
+   ><p align="center">
+   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/fact_trips.png"
+   >  alt="Size Limit comment in pull request about bundle size changes"
+   ></p>
+   >
+   
+   </details>
