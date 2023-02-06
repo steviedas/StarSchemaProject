@@ -187,11 +187,11 @@ Within Databricks, to get this project to create the whole dataset automatically
 2. Add the repository to Databricks account (on Databricks Repos > Add Repo)
 3. Create a Workflow in Databricks (click on Workflows in the left menu bar and click create job)
 4. Add the notebooks located within the repository in this order: 
-   1. DestroySchemasDatabases.py
-   2. RebuildSchemasDatabases.py
-   3. Bronze.py
-   4. Silver.py
-   5. Gold.py
+   1. `DestroySchemasDatabases.py`
+   2. `RebuildSchemasDatabases.py`
+   3. `Bronze.py`
+   4. `Silver.py`
+   5. `Gold.py`
 5. Create/Start/Attach a cluster and run the workflow. After this is done running, you should see within DBFS a file directory as shown in the [DBFS File Structure](#pictures) picture.
 
 ## Pictures
