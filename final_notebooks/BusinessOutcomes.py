@@ -151,7 +151,7 @@ two_a_df1 = two_a_df1.withColumn("month", month(two_a_df["date"]))
 two_a_df2 = two_a_df1.groupBy("year", "month").agg(sum("amount").alias("total_spent_per_month_per_year"))
 
 # Group by month and calculate the average per month
-two_a_df3 = two_a_df2.groupBy("month").agg(avg("total_spent_per_month_per_year").alias("average_spent_per_month"))
+two_a_df3 = two_a_df2.groupBy("month").agg(sum("total_spent_per_month_per_year").alias("average_spent_per_month"))
 two_a_df3 = two_a_df3.orderBy("month")
 
 display(two_a_df3)
@@ -230,19 +230,20 @@ extra_one_a_df = fact_trips_df.join(fact_payments_df, fact_trips_df.rider_id == 
 extra_one_a_1df = extra_one_a_df.join(dim_riders_df, extra_one_a_df.rider_id == dim_riders_df.rider_id, 'left').select("trip_id", fact_trips_df.rider_id, "amount", "started_at_date_id", "is_member").filter(col("is_member") == True)
 
 # Join extra_a_df to dim_dates_df
-extra_one_a_2df = extra_one_a_1df.join(dim_dates_df, extra_one_a_1df.started_at_date_id == dim_dates_df.date_id, 'left').drop("started_at_date_id", "date_id", "is_member", "trip_id")
+extra_one_a_2df = extra_one_a_1df.join(dim_dates_df, extra_one_a_1df.started_at_date_id == dim_dates_df.date_id, 'left').drop("date_id", "is_member", "trip_id")
 
 from pyspark.sql.functions import sum, count, month, year, col
 
 # Group the data by year and month and make the amount_spent and number_of_rides columns
-extra_1a_df = extra_one_a_2df.groupBy(col("rider_id"), year("date").alias("year"), month("date").alias("month")).agg(sum("amount").alias("amount_spent"), count("*").alias("number_of_rides")).orderBy("rider_id")
+extra_1a_df = extra_one_a_2df.groupBy(col("rider_id"), year("date").alias("year"), month("date").alias("month"), "started_at_date_id").agg(sum("amount").alias("amount_spent")) \
+    .groupBy(col("rider_id"), "year", "month").agg(avg("amount_spent").alias("amount_spent"), count("rider_id").alias("number_of_trips"))
 
 display(extra_1a_df)
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### EXTRA 1b - Analyse how much money is spent per member - based on how many rides the rider averages per year per month
+# MAGIC #### EXTRA 1b - Analyse how much money is spent per member - based on how many rides the rider averages per month
 
 # COMMAND ----------
 
@@ -255,12 +256,13 @@ extra_one_b_df = fact_trips_df.join(fact_payments_df, fact_trips_df.rider_id == 
 extra_one_b_1df = extra_one_b_df.join(dim_riders_df, extra_one_b_df.rider_id == dim_riders_df.rider_id, 'left').select("trip_id", fact_trips_df.rider_id, "amount", "started_at_date_id", "is_member").filter(col("is_member") == True)
 
 # Join extra_a_df to dim_dates_df
-extra_one_b_2df = extra_one_b_1df.join(dim_dates_df, extra_one_b_1df.started_at_date_id == dim_dates_df.date_id, 'left').drop("started_at_date_id", "date_id", "is_member", "trip_id")
+extra_one_b_2df = extra_one_b_1df.join(dim_dates_df, extra_one_b_1df.started_at_date_id == dim_dates_df.date_id, 'left').drop("date_id", "is_member", "trip_id")
 
 from pyspark.sql.functions import sum, count, month, year, col
 
 # Group the data by year and month and make the amount_spent and number_of_rides columns
-extra_1b_df = extra_one_b_2df.groupBy(col("rider_id"), month("date").alias("month")).agg(sum("amount").alias("amount_spent"), count("*").alias("number_of_rides")).orderBy("rider_id")
+extra_1b_df = extra_one_b_2df.groupBy(col("rider_id"), month("date").alias("month"), "started_at_date_id").agg(sum("amount").alias("amount_spent")) \
+    .groupBy(col("rider_id"), "month").agg(avg("amount_spent").alias("amount_spent"), count("rider_id").alias("number_of_trips"))
 
 display(extra_1b_df)
 
