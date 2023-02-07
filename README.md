@@ -1,6 +1,6 @@
 # Steven's Star Schema Project Implementation
-![GitHub last commit](https://img.shields.io/github/last-commit/steviedas/steven-repo)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/steviedas/steven-repo)
+![GitHub last commit](https://img.shields.io/github/last-commit/steviedas/StarSchemaProject)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/steviedas/StarSchemaProject)
 
 [Star Schema Design](#star-schema-design) •
 [Raw Data](#raw-data) •
@@ -28,7 +28,7 @@ The various stages of the design of the star schema is shown in the various stag
    <summary>Conceptual Database Design</summary>
 
    ><p align="center">
-   ><img src="https://raw.githubusercontent.com/steviedas/steven-repo/main/pictures/ConceptualDatabaseDesign.png"
+   ><img src="https://raw.githubusercontent.com/steviedas/StarSchemaProject/main/pictures/ConceptualDatabaseDesign.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    >  width="960" height="540">
    ></p>
@@ -40,7 +40,7 @@ The various stages of the design of the star schema is shown in the various stag
    <summary>Logical Database Design</summary>
 
    ><p align="center">
-   ><img src="https://raw.githubusercontent.com/steviedas/steven-repo/main/pictures/LogicalDatabaseDesign.png"
+   ><img src="https://raw.githubusercontent.com/steviedas/StarSchemaProject/main/pictures/LogicalDatabaseDesign.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    >  width="960" height="540"
    ></p>
@@ -52,7 +52,7 @@ The various stages of the design of the star schema is shown in the various stag
    <summary>Physical Database Design</summary>
 
    ><p align="center">
-   ><img src="https://raw.githubusercontent.com/steviedas/steven-repo/main/pictures/PhysicalDatabaseDesign.png"
+   ><img src="https://raw.githubusercontent.com/steviedas/StarSchemaProject/main/pictures/PhysicalDatabaseDesign.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    >  width="960" height="540"
    ></p>
@@ -113,7 +113,7 @@ The notebook called `Bronze` does a few tasks. Below is a summary:
    <summary>Pulls the zips folder from the repository to the Github folder in DBFS</summary>
    
    >```python
-   >!wget "https://github.com/steviedas/steven-repo/raw/main/zips/payments.zip" -P "/dbfs/tmp/Steven/Github/"
+   >!wget "https://github.com/steviedas/StarSchemaProject/raw/main/zips/payments.zip" -P "/dbfs/tmp/Steven/Github/"
    >```  
    
    </details>
@@ -201,7 +201,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>DBFS File Structure</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/DeltaTables.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/DeltaTables.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -212,7 +212,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Bikes Dimension Table</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_bikes.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/dim_bikes.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -223,7 +223,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Dates Dimension Table</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_dates.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/dim_dates.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -235,7 +235,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Riders Dimension Table</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_riders.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/dim_riders.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -247,7 +247,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Stations Dimension Table</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_stations.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/dim_stations.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -259,7 +259,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Times Dimension Table</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/dim_times.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/dim_times.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -271,7 +271,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Fact Payments Table</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/fact_payments.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/fact_payments.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -283,7 +283,7 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Fact Trips Table</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/fact_trips.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/fact_trips.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
    >
@@ -295,12 +295,12 @@ Pictures of the various file structures created and displays of the several dime
    <summary>Successfully Running Workflow</summary>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/StevenWorkFlowFinal1.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/StevenWorkFlowFinal1.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
 
    ><p align="center">
-   ><img src="https://github.com/steviedas/steven-repo/raw/main/pictures/StevenWorkFlowFinal2.png"
+   ><img src="https://github.com/steviedas/StarSchemaProject/raw/main/pictures/StevenWorkFlowFinal2.png"
    >  alt="Size Limit comment in pull request about bundle size changes"
    ></p>
       
