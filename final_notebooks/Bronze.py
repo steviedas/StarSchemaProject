@@ -13,10 +13,10 @@ dbutils.fs.rm("/tmp/Steven/Github/", True)
 
 # COMMAND ----------
 
-!wget "https://github.com/steviedas/steven-repo/raw/main/zips/payments.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/raw/main/zips/riders.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/raw/main/zips/stations.zip" -P "/dbfs/tmp/Steven/Github/"
-!wget "https://github.com/steviedas/steven-repo/raw/main/zips/trips.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/StarSchemaProject/raw/main/zips/payments.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/StarSchemaProject/raw/main/zips/riders.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/StarSchemaProject/raw/main/zips/stations.zip" -P "/dbfs/tmp/Steven/Github/"
+!wget "https://github.com/steviedas/StarSchemaProject/raw/main/zips/trips.zip" -P "/dbfs/tmp/Steven/Github/"
 
 # COMMAND ----------
 
@@ -62,7 +62,7 @@ for zip_file in zip_files:
 
 # COMMAND ----------
 
-# MAGIC %run /Repos/steven.das@qualyfi.co.uk/steven-repo/final_notebooks/SchemaCreation
+# MAGIC %run /Repos/steven.das@qualyfi.co.uk/StarSchemaProject/final_notebooks/SchemaCreation
 
 # COMMAND ----------
 

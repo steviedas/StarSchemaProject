@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run /Repos/steven.das@qualyfi.co.uk/steven-repo/final_notebooks/SchemaCreation
+# MAGIC %run /Repos/steven.das@qualyfi.co.uk/StarSchemaProject/final_notebooks/SchemaCreation
 
 # COMMAND ----------
 
