@@ -100,13 +100,6 @@ assert fact_trips_df.schema == trips_gold_schema, "Schema mismatch on: Trips tab
 # ASSERT 1
 assert one_a_week_grouped_df.count() == 7, "This dataframe has an incorrect number of rows, there should only be 7 rows for 7 days"
 
-# ASSERT 2
-# Calculate the average of the average_trip_duration column
-#one_a_week_grouped_df_average = one_a_week_grouped_df.agg({'average_trip_duration': 'mean'}).first()[0]
-
-# Check the average value
-#assert one_a_week_grouped_df_average == 16.859760676200302
-
 # COMMAND ----------
 
 # MAGIC %md
