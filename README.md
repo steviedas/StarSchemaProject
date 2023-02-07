@@ -185,14 +185,19 @@ assert one_a_week_grouped_df.count() == 7, "This dataframe has an incorrect numb
 Within Databricks, to get this project to create the whole dataset automatically, follow the steps listed below:
 1. Clone the repository to your own github account (or ask to be added as a contributor).
 2. Add the repository to Databricks account (on Databricks Repos > Add Repo)
-3. Create a Workflow in Databricks (click on Workflows in the left menu bar and click create job)
-4. Add the notebooks located within the repository in this order: 
+3. Create a Workflow in Databricks (click on Workflows in the left menu bar and click create job). Give each task a name that is suitable and fill out the following:
+   1. Set `Type` as `Notebook`
+   2. Set `Source` as `Git provider` - click the `Add a git reference` and provide it with the `Git repository URL` and set a branch
+   3. Set the `Path`, this should be in this format `final_notebook/<NotebookName>`
+   4. Save the task
+4. Repeat step 3 for all the relevant notebooks. Add the notebooks located within the repository to the workflow in this order: 
    1. `DestroySchemasDatabases.py`
    2. `RebuildSchemasDatabases.py`
    3. `Bronze.py`
    4. `Silver.py`
    5. `Gold.py`
 5. Create/Start/Attach a cluster and run the workflow. After this is done running, you should see within DBFS a file directory as shown in the [DBFS File Structure](#pictures) picture.
+6. Once the workflow has finished running, all the relevant tables will have been created within DBFS.
 
 ## Pictures
 Pictures of the various file structures created and displays of the several dimension and fact tables, are shown below:
