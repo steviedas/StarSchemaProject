@@ -310,6 +310,6 @@ extra_two_b_df2 = extra_two_b_df1.join(dim_dates_df, extra_two_b_df1.started_at_
 
 # Group the data by year and month and make the amount_spent and total_trip_duration columns
 extra_two_b_grouped_df = extra_two_b_df2.groupBy(col("rider_id"), month("date").alias("month"), col("trip_duration")).agg(sum("amount").alias("amount_spent")).orderBy("rider_id")
-extra_two_b_grouped_df = extra_two_b_grouped_df.groupBy(col("rider_id"), "month", col("amount_spent")).agg(sum("trip_duration")).orderBy("rider_id")
+extra_two_b_grouped_df = extra_two_b_grouped_df.groupBy(col("rider_id"), "month", col("amount_spent")).agg(sum("trip_duration").alias("total_trip_duration")).orderBy("rider_id")
 
 display(extra_two_b_grouped_df)
