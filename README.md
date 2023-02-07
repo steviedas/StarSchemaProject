@@ -197,7 +197,6 @@ Within Databricks, to get this project to create the whole dataset automatically
    4. `Silver.py`
    5. `Gold.py`
 5. Create/Start/Attach a cluster and run the workflow. After this is done running, you should see within DBFS a file directory as shown in the [DBFS File Structure](#pictures) picture.
-6. Once the workflow has finished running, all the relevant tables will have been created within DBFS.
 
 ## Pictures
 Pictures of the various file structures created and displays of the several dimension and fact tables, are shown below:
