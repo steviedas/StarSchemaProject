@@ -74,12 +74,31 @@ assert dim_stations_df_columns == 4, "This dataframe has an incorrect number of 
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC #### Checking that the schemas for the created the gold tables match the schemas in SchemaCreation
+
+# COMMAND ----------
+
+# MAGIC %run /Repos/steven.das@qualyfi.co.uk/StarSchemaProject/final_notebooks/SchemaCreation
+
+# COMMAND ----------
+
+assert dim_bikes_df.schema == bike_gold_schema, "Schema mismatch on: Bikes table"
+assert dim_dates_df.schema == date_gold_schema, "Schema mismatch on: Dates table"
+assert dim_times_df.schema == time_gold_schema, "Schema mismatch on: Times table"
+assert dim_stations_df.schema == stations_gold_schema, "Schema mismatch on: Stations table"
+assert dim_riders_df.schema == riders_gold_schema, "Schema mismatch on: Riders table"
+assert fact_payments_df.schema == payments_gold_schema, "Schema mismatch on: Payments table"
+assert fact_trips_df.schema == trips_gold_schema, "Schema mismatch on: Trips table"
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC #### 1a. Analyse how much time is spent per ride - based on date and time factors - time of day 
 
 # COMMAND ----------
 
 # ASSERT 1
-assert one_a_week_grouped_df.count() == 7, "This dataframe has an incorrect number of rows"
+assert one_a_week_grouped_df.count() == 7, "This dataframe has an incorrect number of rows, there should only be 7 rows for 7 days"
 
 # ASSERT 2
 # Calculate the average of the average_trip_duration column
@@ -96,7 +115,7 @@ assert one_a_week_grouped_df.count() == 7, "This dataframe has an incorrect numb
 # COMMAND ----------
 
 # ASSERT 1
-assert one_a_time_grouped_df.count() <= 24, "This dataframe has more hours in the day than there should be!"
+assert one_a_time_grouped_df.count() <= 24, "This dataframe for question 1a, has more hours in the day than there should be!"
 
 # COMMAND ----------
 
@@ -106,10 +125,10 @@ assert one_a_time_grouped_df.count() <= 24, "This dataframe has more hours in th
 # COMMAND ----------
 
 # ASSERT 1
-assert start_station_grouped_df.distinct().count() == 74, "This dataframe has an incorrect number of rows"
+assert start_station_grouped_df.distinct().count() == 74, "This dataframe has an incorrect number of rows in question 1b for start station, there should be 74 rows"
 
 # ASSERT 2
-assert end_station_grouped_df.distinct().count() == 67, "This dataframe has an incorrect number of rows"
+assert end_station_grouped_df.distinct().count() == 67, "This dataframe has an incorrect number of rows in question 1b for end station, there should be 67 rows"
 
 # COMMAND ----------
 
@@ -119,7 +138,14 @@ assert end_station_grouped_df.distinct().count() == 67, "This dataframe has an i
 # COMMAND ----------
 
 # ASSERT 1
-assert one_c_grouped_df.distinct().count() == 44, "This dataframe has an incorrect number of rows"
+assert one_c_grouped_df.distinct().count() == 44, "This dataframe has an incorrect number of rows in question 1c, there should be 44 rows"
+
+# q1e_count = timeSpentPerRide_RiderAge.filter(col("rider_age") < 5).count()
+# assert q1e_count == 0, "Incorrect value found in Q1E, found rider younger than 5"
+
+# COMMAND ----------
+
+display(one_c_grouped_df)
 
 # COMMAND ----------
 
@@ -131,14 +157,14 @@ assert one_c_grouped_df.distinct().count() == 44, "This dataframe has an incorre
 from pyspark.sql.functions import col
 
 # ASSERT 1
-assert one_d_grouped_df.count() == 2, "This dataframe has an incorrect number of rows"
+assert one_d_grouped_df.count() == 2, "This dataframe has an incorrect number of rows in question 1d, there should be 2 rows"
 
 # ASSERT 2
 # Get the number of columns in the bike_df DataFrame
 one_d_grouped_df_columns = len(one_d_grouped_df.columns)
 
 # Check the number of columns
-assert one_d_grouped_df_columns == 2, "This dataframe has an incorrect number of columns"
+assert one_d_grouped_df_columns == 2, "This dataframe has an incorrect number of columns in question 1d, there should only be two columns"
 
 # ASSERT 3
 # Extract the column you want to check
@@ -148,7 +174,7 @@ one_d_grouped_df_is_member = one_d_grouped_df.select(col("is_member"))
 one_d_grouped_df_is_member_values = one_d_grouped_df_is_member.distinct().collect()
 
 # Check if all the values in the list are either True or False
-assert all(val[0] in [True, False] for val in one_d_grouped_df_is_member_values), "Not all values are boolean"
+assert all(val[0] in [True, False] for val in one_d_grouped_df_is_member_values), "In question 1d, the produced dataframe has values are not boolean"
 
 # COMMAND ----------
 
